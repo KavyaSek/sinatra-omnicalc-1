@@ -48,3 +48,10 @@ end
 get("/random/new") do
   erb(:random)
 end
+
+get("/random/results") do
+  @min = params[:min].to_f
+  @max = params[:max].to_f
+  @rand = rand(@min..@max)
+  erb(:random_res)
+end
