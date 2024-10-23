@@ -11,7 +11,7 @@ end
 
 get("/squares/results") do
   number = params[:number]
-  @num = number.to_i
+  @num = number.to_f
   @result = (@num * @num).to_f
   erb(:squares_res)
 end
@@ -22,7 +22,7 @@ end
 
 get("/square_root/results") do
   number = params[:number]
-  @num = number.to_i
+  @num = number.to_f
   @result = Math.sqrt(@num)
   erb(:square_root_res)
 end
@@ -33,14 +33,15 @@ end
 
 get("/payment/results") do
   @apr = params[:apr]
-  @years = params[:years]
-  @principal = params[:principal]
-  r = @apr.to_f/(100*12)
-  n = @years.to_i*12
-  pv = @principal.to_i
-  @numerator = r*pv
-  @denominator = (1+r)**(-n)
-  @pmt = @numerator/@denominator
+  @years = params[:years].to_i
+  @principal = params[:principal].to_f
+  r = @apr.to_f
+  n = @years*12
+  @pv = @principal.round(2).to_fs(:currency)
+  @r_percentage= r.round(4)
+  @numerator = r*@principal/(100*12)
+  @denominator = (1-((1+r)**(-n)))
+  @pmt = (@numerator/@denominator).round(2).to_fs(:currency)
   erb(:payment_res)
 end
 
