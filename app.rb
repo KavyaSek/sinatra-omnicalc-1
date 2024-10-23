@@ -32,16 +32,15 @@ get("/payment/new") do
 end
 
 get("/payment/results") do
-  @apr = params[:apr]
+  @apr = params[:apr].to_f
   @years = params[:years].to_i
   @principal = params[:principal].to_f
-  r = @apr.to_f
   n = @years*12
-  @pv = @principal.round(2).to_fs(:currency)
-  @r_percentage= r.round(4)
-  @numerator = r*@principal/(100*12)
-  @denominator = (1-((1+r)**(-n)))
-  @pmt = (@numerator/@denominator).round(2).to_fs(:currency)
+  @pv = @principal.round(2).to_fs(:currency, {:precision => 2})
+  @r_percentage= @apr.to_fs(:percentage, {:precision => 4})
+  @numerator = @apr*@principal/(100*12)
+  @denominator = (1-((1+@apr)**(-n)))
+  @pmt = (@numerator/@denominator).to_fs(:currency, {:precision => 2})
   erb(:payment_res)
 end
 
