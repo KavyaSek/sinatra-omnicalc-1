@@ -9,9 +9,9 @@ get("/square/new") do
    erb(:squares)
 end
 
-get("/square/results") do
+get("/squares/results") do
   number = params[:number]
-  @num = number
+  @num = number.to_i
   @result = @num * @num
   erb(:squares_res)
 end
